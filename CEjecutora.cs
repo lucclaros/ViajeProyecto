@@ -10,57 +10,64 @@ namespace Viaje
     {
         public static void Main()
         {
-            float costoporkm;
-            ushort kmMinimo;
-            // 1
+            float costoPorKm = LeerFloat("Ingresar el valor del costo por kilometro: ");
+            ushort kmMinimo = LeerUShort("Ingresar el kilometraje minimo: ");
 
-            Console.WriteLine("Ingresar el valor del costo por kilometro : ");
-            costoporkm = float.Parse(Console.ReadLine());
-            Console.WriteLine("Ingresar el kilometraje minimo : ");
-            kmMinimo = ushort.Parse(Console.ReadLine());
-          
-
-            CViaje.SetCostoPorKilometro(costoporkm);
+            CViaje.SetCostoPorKilometro(costoPorKm);
             CViaje.SetKmMinimo(kmMinimo);
 
-            Console.WriteLine("Costo por kilometro : {0}  Kilometraje minimo : {1} ", costoporkm, kmMinimo);
+            Console.WriteLine($"Costo por kilometro: {costoPorKm}, Kilometraje minimo: {kmMinimo}");
 
-            // 2
+            CViaje viajeActual, viajeMayorRecorrido = new CViaje();
+            string dominio;
+            
+            Console.WriteLine("Ingresar dominio (para finalizar, escriba 'Fin'):");
+            dominio = Console.ReadLine();
 
-            CViaje Viaje1, ViajeMayorRecorrido;
-            string dom = "";
-            ushort distancia_recorrida;
-            Console.WriteLine("Ingresar dominio : ");
-            dom = Console.ReadLine();
-            ViajeMayorRecorrido = new CViaje();
-
-            if(dom != "Fin")
+            if (dominio != "Fin")
             {
-                while(dom != "Fin")
+                while (dominio != "Fin")
                 {
-                    Console.WriteLine("Ingresar distancia recorrida : ");
-                    distancia_recorrida = ushort.Parse(Console.ReadLine());
-                    Viaje1 = new CViaje(dom, distancia_recorrida);
-                    if(Viaje1.MayorDistancia(ViajeMayorRecorrido) > 0)
-                    {
-                        ViajeMayorRecorrido = Viaje1;
-                    }
-                    Console.WriteLine("Ingresar dominio : (para finalizar, escriba 'Fin')");
-                    dom = Console.ReadLine();
+                    ushort distancia = LeerUShort("Ingresar distancia recorrida: ");
+                    viajeActual = new CViaje(dominio, distancia);
+
+                    if (viajeActual.MayorDistancia(viajeMayorRecorrido) > 0)
+                        viajeMayorRecorrido = viajeActual;
+
+                    Console.WriteLine("Ingresar dominio (para finalizar, escriba 'Fin'):");
+                    dominio = Console.ReadLine();
                 }
-                // 3
-                Console.WriteLine("VIAJE CON MAYOR RECORRIDO : ");
-                Console.WriteLine(ViajeMayorRecorrido.DarDatos());
-            } 
-            // 4
+
+                Console.WriteLine("\nVIAJE CON MAYOR RECORRIDO:");
+                Console.WriteLine(viajeMayorRecorrido.DarDatos());
+            }
             else
             {
-                Console.WriteLine("No se ingresaron viajes validos.");
+                Console.WriteLine("No se ingresaron viajes válidos.");
             }
 
-            Console.Write("Fin del programa. Presione <ENTER> para finalizar");
+            Console.WriteLine("\nFin del programa. Presione <ENTER> para finalizar.");
             Console.ReadLine();
+        }
 
+        private static float LeerFloat(string mensaje)
+        {
+            float valor;
+            do
+            {
+                Console.Write(mensaje);
+            } while (!float.TryParse(Console.ReadLine(), out valor));
+            return valor;
+        }
+
+        private static ushort LeerUShort(string mensaje)
+        {
+            ushort valor;
+            do
+            {
+                Console.Write(mensaje);
+            } while (!ushort.TryParse(Console.ReadLine(), out valor));
+            return valor;
         }
     }
 }
